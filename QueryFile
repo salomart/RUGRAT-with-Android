@@ -1,0 +1,18 @@
+<SQLQuery>
+	<Query value="Select * FROM COMPANY">
+		<Result SeqNumber="1" Name="COMPANYID" Type="int"/>
+		<Result SeqNumber="2" Name="NAME" Type="String"/>
+		<Result SeqNumber="3" Name="ZIPCODE" Type="int"/>
+	</Query>
+	<Query value="select SSN, AGE, ZIPCODE, CITIZENSHIP FROM PERSON">
+		<Result SeqNumber="1" Name="SSN" Type="String"/>
+		<Result SeqNumber="2" Name="AGE" Type="int"/>
+		<Result SeqNumber="3" Name="ZIPCODE" Type="int"/>
+		<Result SeqNumber="4" Name="CITIZENSHIP" Type="String"/>
+	</Query>
+	<Query value="select COMPANYID, INDUSTRYCODE, SSN FROM EMPLOYMENT">
+		<Result SeqNumber="1" Name="COMPANYID" Type="int"/>
+		<Result SeqNumber="2" Name="INDUSTRYCODE" Type="int"/>
+		<Result SeqNumber="3" Name="SSN" Type="String"/>
+	</Query>
+</SQLQuery>

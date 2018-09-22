@@ -1,0 +1,34 @@
+totalLOC	10000	20000
+noOfInterfaces	5	10
+useQueries	false	true
+maxNoOfMethodsPerInterface	5	558
+noOfClasses	30	88
+maxAllowedMethodCalls	2	5
+maxValueForLoop	5	10
+injectFilename	
+password	
+allowIndirectRecursion	no yes
+maximumArraySize	200	400
+dbName	
+doReachabilityMatrix	no	yes
+noOfInheritanceChains	5	10
+probability	20	50
+maxNestedIfs	2	5
+minNoOfClassFields	5	10
+allowArray	yes	no
+maxInheritanceDepth	5	10
+maxNoOfParametersPerMethod	7	30
+minInheritanceDepth	2	10
+dbDriver
+maxInterfacesToImplement	2	5
+maxRecursionDepth	1	6
+dbUsername	
+classNamePrefix	TenKLOC
+maxNoOfClassFields	7 10
+maxNoOfMethodsPerClass	10	2000
+recursionProbability	0	1
+minNoOfParametersPerMethod	3	30
+intMaxValue	777	1000
+queryFilename	
+callType	MCO2_2
+allowedTypes	8	char	byte	short	int	long	float	double	String	Object

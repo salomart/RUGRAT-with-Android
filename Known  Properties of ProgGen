@@ -1,0 +1,11 @@
+Known properties of ProgGen:
+	* For 'for' loops it does not use parameters in controlling condition, for(int i=0; i<i8; i++){//stmt..} can iterate very long
+	* To avoid divide by zero: it avoids (i5-i5)type expressions and also only uses literals.
+	* Nested if statements are controlled globally. Meaning we can set the total allowed nested if's
+	* Controlled recursion used. It uses 'Percent' to decide if it should allow or quit the recursion.
+	* No do-while loop used
+	* Set upper limit in method calls in a method body.
+	* Method calls are not allowed in the 'for' loop directly, they can come in the form of if(cond){//call method}
+	* Logical AND operator is preferred (75%)than the OR (25%) operators
+	* If 'Percent' is set too high (e.g., 70%), then the random number generator might always choose a value less than 'Percent'
+		this will keep calling the same method, causing StackOverflowError

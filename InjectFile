@@ -1,0 +1,31 @@
+// begin injected contents
+/*
+ * Example Inject File 
+ * 1. do not specify field names like f0,f1, etc. They are reserved
+ * for RUGRAT generation.
+ *
+ * 2. do not specify method names like [ClassPrefix]method[number]. They 
+ * are reserved for RUGRAT generation. Similarly don't mention possible 
+ * interface methods.
+ *
+ * 3. write syntactically correct JAVA contents here. You can assume that
+ * the class block will be written for you, and the contents here will
+ * be injected into every generated class.
+ *
+ * 4. keep the types consistent with config.xml . the contents here will be
+ * blindly injected into the classes. No verification done before injection.
+ *
+ * 5. void is not a valid type.
+ *
+ * 6. methods should take atleast one argument.
+ *
+ */
+ //end injected contents
+int myClassFieldInteger;
+
+private int myTestFunction(int value)
+{
+	return 2;
+}
+//end of injected contents
+ 
