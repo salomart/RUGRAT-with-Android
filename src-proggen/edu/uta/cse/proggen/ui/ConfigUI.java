@@ -11,6 +11,8 @@
 
 package edu.uta.cse.proggen.ui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
@@ -364,10 +366,9 @@ public class ConfigUI extends javax.swing.JFrame {
 			
 			public void actionPerformed(ActionEvent e) 
 			{
-				
-				processAndWriteToXML();	
-				execute();
-				
+				if (processAndWriteToXML()) {
+					execute();
+				}
 			}
 		});
         
@@ -857,7 +858,7 @@ public class ConfigUI extends javax.swing.JFrame {
     }
     
 
-    private void processAndWriteToXML()
+    private boolean processAndWriteToXML()
     {
     	ArrayList<String> allowedTypes = new ArrayList<String>();
     	HashMap<String, String> properties = new HashMap<String, String>();
@@ -930,7 +931,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		if(!isPositiveNumber(maxInheritanceDepth))
 		{
 			JOptionPane.showMessageDialog(this, "Put a positive number", "Typo in \"Max. Inheritance Depth\"", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		//minInheritanceDepth
@@ -939,14 +940,14 @@ public class ConfigUI extends javax.swing.JFrame {
 		if(!isPositiveNumber(minInheritanceDepth))
 		{
 			JOptionPane.showMessageDialog(this, "Please provide a positive number.", "Typo in \"Min. Inheritance Depth\"", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		// Should be: minInheritanceDepth  <= maxInheritanceDepth
 		
 		if(!isLessThanEqual(minInheritanceDepth, maxInheritanceDepth)){
 			JOptionPane.showMessageDialog(this, "Please provide a larger (or equal) value for Max. Inheritance Depth.", "Inheritance Depth: Min. cannot be greater than Max.", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}		
 		
 		String noOfInheritanceChains = jTextField9.getText();
@@ -974,7 +975,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		}
 		if(! isLessThanEqual(maxInterfacesToImplement, noOfInterfaces)){
 			JOptionPane.showMessageDialog(this, "Please provide a larger (or equal) value for 'Number of interfaces to generate'.", "Interfaces: Less number of interfaces available for a class to implement.", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 			
 		
@@ -999,7 +1000,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		
 		if(!isLessThanEqual(minNoOfParameters, maxNoOfParameters)){
 			JOptionPane.showMessageDialog(this, "'minNoOfParametersPerMethod' should be less than or equal to 'maxNoOfParametersPerMethod");
-			return;
+			return false;
 		}
 		
 		String maxNoOfMethodsPerClass = jTextField13.getText();
@@ -1031,7 +1032,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		if( !isArrayAllowed.equals("yes") && !isArrayAllowed.equals("no") )
 		{
 			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Allow arrays as class field?\"", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 			
 		}			
 		properties.put("allowArray", isArrayAllowed); 
@@ -1089,7 +1090,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			Object[] objArray = needsValidation.toArray();
 			JOptionPane.showMessageDialog(this, objArray, "Positive integer or Zero expected for:", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		int probabilityAsInteger = Integer.valueOf(probability);
@@ -1097,7 +1098,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			JOptionPane.showMessageDialog(this, "Enter value between 0 and 100 for probability.", 
 					"Validation Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		int recursionProbabilityAsInteger = Integer.valueOf(recursionProbability);
@@ -1105,7 +1106,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			JOptionPane.showMessageDialog(this, "Enter value between 0 and 100 for recursion probability.", 
 					"Validation Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		int inheritanceDepthAsNumber = Integer.valueOf(maxInheritanceDepth);
@@ -1115,7 +1116,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			String labelString = "Number of classes should be equal to or more than (inheritanceDepth * no. of Inheritance Chains)";
 			JOptionPane.showMessageDialog(this, labelString, "Validation Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		
 		String callType = jTextField24.getText();
@@ -1126,7 +1127,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			String labelString = "Call type should be one of: MCO1_1, MCO1_2, MCO2_1, MCO2_2";
 			JOptionPane.showMessageDialog(this, labelString, "Validation Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		properties.put("callType", callType);
 		
@@ -1135,7 +1136,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		if( !allowIndirectRecursion.equals("yes") && !allowIndirectRecursion.equals("no") )
 		{
 			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Allow indirect recursion?\"", JOptionPane.ERROR_MESSAGE);
-			return;			
+			return false;			
 		}	
 		properties.put("allowIndirectRecursion", allowIndirectRecursion);
 		
@@ -1143,7 +1144,7 @@ public class ConfigUI extends javax.swing.JFrame {
 		if( !doReachabilityMatrix.equals("yes") && !doReachabilityMatrix.equals("no") )
 		{
 			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Create Reachability Matrix?\"", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 			
 		}			
 		properties.put("doReachabilityMatrix", doReachabilityMatrix); 
@@ -1208,10 +1209,11 @@ public class ConfigUI extends javax.swing.JFrame {
 		{
 			String labelString = "Atleast one type needs to be selected!";
 			JOptionPane.showMessageDialog(this, labelString, "Validation Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 				
 		writeToConfigXML(properties, allowedTypes);
+		return true;
 //		String[] args = {};
 //		String labelString = "Interface and class generation started. Refer the console for logs and progress.";
 //		JOptionPane.showMessageDialog(this, labelString, "Information", JOptionPane.INFORMATION_MESSAGE);
@@ -1311,6 +1313,9 @@ public class ConfigUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                ConfigUI frame = new ConfigUI();
+               Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+               double height = screenSize.getHeight() - 100;
+               frame.setSize(700, (int)height);
                frame.setVisible(true);
                frame.toFront(); // to bring the frame in front.
                 
