@@ -172,7 +172,14 @@ public class TreeOfSingleEntryGenerator {
 					
 					output.append("package com.accenture.lab.carfast.test;\n\n");
 //					output.append("public class FiveMLOCStart {\n");
-					output.append("public class "+ConfigurationXMLParser.getProperty("classNamePrefix")+"Start {\n");
+					boolean includeAndroidLibraries = ConfigurationXMLParser
+							.getProperty("includeAndroidLibraries")
+							.equals("yes");
+					output.append(includeAndroidLibraries ? "import android.app.Activity;\n" +
+							"import android.app.AlertDialog;\n" +
+							"import android.os.Bundle;\n\n" +
+							"public class " + ConfigurationXMLParser.getProperty("classNamePrefix") + "Start extends Activity {\n"
+							: "public class "+ConfigurationXMLParser.getProperty("classNamePrefix")+"Start {\n");
 					for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
 						output.append("private static int f"+ k + ";\n");
 					}
@@ -192,7 +199,15 @@ public class TreeOfSingleEntryGenerator {
 					
 					output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
 					
-					output.append("public static void main(String[] args){\n entryMethod(");
+					output.append(includeAndroidLibraries ? "@Override\r\n" + 
+							"protected void onCreate(Bundle savedInstanceState) {\n" +
+							"super.onCreate(savedInstanceState);\n" +
+							"AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n" + 
+							"builder1.setMessage(\"Hello World!\");\n" + 
+							"builder1.setCancelable(true);\n" + 
+							"AlertDialog alert11 = builder1.create();\r\n" + 
+							"alert11.show();\n" +
+							"entryMethod(" : "public static void main(String[] args){\n entryMethod(");
 					
 					StringBuilder str = new StringBuilder();
 					for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){

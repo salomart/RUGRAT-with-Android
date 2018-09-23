@@ -159,6 +159,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextAllowIndirectRecursion = new JTextField();
         jLabelAllowIndirectRecursion = new JLabel();
         
+        //includeAndroidLibraries
+        jTextIncludeAndroidLibraries = new JTextField();
+        jLabelIncludeAndroidLibraries = new JLabel();
+        
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -268,6 +272,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextReachability.setName("reachabiltyMatrix");
         jTextReachability.setText("NO");
         jLabelReachability.setToolTipText("This will create a matrix of method caller-callee, it requires much memory space to build.");
+        
+        jTextIncludeAndroidLibraries.setName("androidLibraries");
+        jTextIncludeAndroidLibraries.setText("NO");
+        jLabelIncludeAndroidLibraries.setToolTipText("This will give the start file android libraries to allow the files to be imported into an Android project.");
 
         jCheckBox1.setText("char");
         jCheckBox1.setName("char"); // NOI18N
@@ -359,6 +367,8 @@ public class ConfigUI extends javax.swing.JFrame {
         jLabelAllowIndirectRecursion.setText("Allow indirect recursion (e.g. A-B-A )? (YES/NO)");
         
         jLabelReachability.setText("Create Reachability Matrix? (YES/NO)");
+        
+        jLabelIncludeAndroidLibraries.setText("Include Android Libraries? (YES/NO)");
 
         jButton1.setText("Generate");
         jButton1.setName("generate"); // NOI18N
@@ -438,6 +448,7 @@ public class ConfigUI extends javax.swing.JFrame {
                             .addComponent(jLabel25)
                             .addComponent(jLabelAllowIndirectRecursion)
                             .addComponent(jLabelReachability)
+                            .addComponent(jLabelIncludeAndroidLibraries)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel26))
@@ -472,6 +483,7 @@ public class ConfigUI extends javax.swing.JFrame {
                                 .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextAllowIndirectRecursion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextReachability, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextIncludeAndroidLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextMinNoOfClassFields, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -640,6 +652,10 @@ public class ConfigUI extends javax.swing.JFrame {
                 		.addComponent(jLabelReachability)
                 		.addComponent(jTextReachability, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 		.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)               
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelIncludeAndroidLibraries)
+                        .addComponent(jTextIncludeAndroidLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(jCheckBox3)
@@ -816,6 +832,8 @@ public class ConfigUI extends javax.swing.JFrame {
 				jTextField23.setText(value);
 			else if(name.equals("callType"))
 				jTextField24.setText(value);
+			else if(name.equals("includeAndroidLibraries"))
+				jTextIncludeAndroidLibraries.setText(value);
 			else if(name.equals("allowedTypes"))
 			{
 				NodeList types = node.getChildNodes();
@@ -1148,6 +1166,15 @@ public class ConfigUI extends javax.swing.JFrame {
 			
 		}			
 		properties.put("doReachabilityMatrix", doReachabilityMatrix); 
+		
+		String includeAndroidLibraries = jTextIncludeAndroidLibraries.getText().toLowerCase();
+		if( !includeAndroidLibraries.equals("yes") && !includeAndroidLibraries.equals("no") )
+		{
+			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Include Android Libraries?\"", JOptionPane.ERROR_MESSAGE);
+			return false;
+			
+		}			
+		properties.put("includeAndroidLibraries", includeAndroidLibraries); 
 			
 		boolean isChecked = false;
 				
@@ -1418,6 +1445,10 @@ public class ConfigUI extends javax.swing.JFrame {
     //AllowIndirectRecursion
     private javax.swing.JTextField jTextAllowIndirectRecursion;
     private javax.swing.JLabel jLabelAllowIndirectRecursion;
+    
+    // IncludeAndroidLibraries
+    private javax.swing.JTextField jTextIncludeAndroidLibraries;
+    private javax.swing.JLabel jLabelIncludeAndroidLibraries;
    
     // End of variables declaration//GEN-END:variables
 }
