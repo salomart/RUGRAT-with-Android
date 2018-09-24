@@ -211,7 +211,7 @@ public class TreeOfSingleEntryGenerator {
 					
 					StringBuilder str = new StringBuilder();
 					for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
-						str.append("Integer.parseInt(args["+ i+ "]),");
+						str.append(includeAndroidLibraries ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
 					}
 					String s = str.toString();
 					s = s.substring(0, str.length()-1);
