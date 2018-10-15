@@ -227,7 +227,7 @@ public class TreeOfSingleEntryGenerator {
 						for (int j = 0; j < methCallLimit && count < target; j++, count++) {
 							output.append("Intent service" + j + " = new Intent(this, "
 									+ ConfigurationXMLParser.getProperty("classNamePrefix")
-									+ count + ".class);\r\n"
+									+ count + ".class);\n"
 									+ "startService(service" + j + ");\n");
 						}
 						
