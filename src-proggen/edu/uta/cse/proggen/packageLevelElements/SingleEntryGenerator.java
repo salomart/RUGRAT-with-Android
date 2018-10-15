@@ -24,7 +24,13 @@ public class SingleEntryGenerator {
 	
 	private void appendPackageName() 
 	{
-		program += "package com.accenture.lab.carfast.test;\n\n\n";
+		String packageName = ConfigurationXMLParser.getProperty("packageName");
+		
+		if (packageName != null && packageName != "") {
+			program += "package " + packageName + ";\n\n\n";
+		} else {
+			program += "package com.accenture.lab.carfast.test;\n\n\n";
+		}
 	}
 	private void appendClassName(){
 		program += "public class "+ConfigurationXMLParser.getProperty("classNamePrefix")+"Start {\n";

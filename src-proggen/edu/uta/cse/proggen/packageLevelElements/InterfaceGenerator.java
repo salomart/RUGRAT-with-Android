@@ -72,7 +72,13 @@ public class InterfaceGenerator
 	
 	public String getPackageName()
 	{
-		return "package com.accenture.lab.carfast.test;\n\n\n";
+		String packageName = ConfigurationXMLParser.getProperty("packageName");
+		
+		if (packageName != null && packageName != "") {
+			return "package " + packageName + ";\n\n\n";
+		} else {
+			return "package com.accenture.lab.carfast.test;\n\n\n";
+		}
 	}
 
 	public String toString()

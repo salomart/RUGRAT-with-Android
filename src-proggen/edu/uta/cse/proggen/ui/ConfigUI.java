@@ -167,6 +167,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextIncludeAndroidServices = new JTextField();
         jLabelIncludeAndroidServices = new JLabel();
         
+        //includeAndroidServices
+        jTextPackageName = new JTextField();
+        jLabelPackageName = new JLabel();
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         
@@ -284,6 +288,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextIncludeAndroidServices.setText("NO");
         jLabelIncludeAndroidServices.setToolTipText("This will extend the classes with the IntentService superclass.");
 
+        jTextPackageName.setName("packageName");
+        jTextPackageName.setText("com.accenture.lab.carfast.test");
+        jLabelPackageName.setToolTipText("This is the package name used in the generated files.");
+        
         jCheckBox1.setText("char");
         jCheckBox1.setName("char"); // NOI18N
 
@@ -378,6 +386,8 @@ public class ConfigUI extends javax.swing.JFrame {
         jLabelIncludeAndroidLibraries.setText("Include Android Libraries? (YES/NO)");
         
         jLabelIncludeAndroidServices.setText("Include Android Services? (YES/NO)");
+        
+        jLabelPackageName.setText("Package Name");
 
         jButton1.setText("Generate");
         jButton1.setName("generate"); // NOI18N
@@ -459,6 +469,7 @@ public class ConfigUI extends javax.swing.JFrame {
                             .addComponent(jLabelReachability)
                             .addComponent(jLabelIncludeAndroidLibraries)
                             .addComponent(jLabelIncludeAndroidServices)
+                            .addComponent(jLabelPackageName)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel26))
@@ -495,6 +506,7 @@ public class ConfigUI extends javax.swing.JFrame {
                                 .addComponent(jTextReachability, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextIncludeAndroidLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextIncludeAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextPackageName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextMinNoOfClassFields, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -534,6 +546,10 @@ public class ConfigUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelPackageName)
+                        .addComponent(jTextPackageName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -851,6 +867,8 @@ public class ConfigUI extends javax.swing.JFrame {
 				jTextIncludeAndroidLibraries.setText(value);
 			else if(name.equals("includeAndroidServices"))
 				jTextIncludeAndroidServices.setText(value);
+			else if(name.equals("packageName"))
+				jTextPackageName.setText(value);
 			else if(name.equals("allowedTypes"))
 			{
 				NodeList types = node.getChildNodes();
@@ -1201,6 +1219,15 @@ public class ConfigUI extends javax.swing.JFrame {
 			
 		}			
 		properties.put("includeAndroidServices", includeAndroidServices); 
+		
+		String packageName = jTextPackageName.getText().toLowerCase();
+		if( !packageName.matches("^[a-zA-Z]+(.[a-zA-Z]+)*$") )
+		{
+			JOptionPane.showMessageDialog(this, "The package name entered is invalid", "Invalid Package Name", JOptionPane.ERROR_MESSAGE);
+			return false;
+			
+		}			
+		properties.put("packageName", packageName); 
 			
 		boolean isChecked = false;
 				
@@ -1480,5 +1507,9 @@ public class ConfigUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextIncludeAndroidServices;
     private javax.swing.JLabel jLabelIncludeAndroidServices;
    
+    //PackageName
+    private javax.swing.JTextField jTextPackageName;
+    private javax.swing.JLabel jLabelPackageName;
+    
     // End of variables declaration//GEN-END:variables
 }

@@ -87,6 +87,7 @@ public class TreeOfSingleEntryGenerator {
 		boolean includeAndroidServices = ConfigurationXMLParser
 				.getProperty("includeAndroidServices")
 				.equals("yes");
+		String packageName = ConfigurationXMLParser.getProperty("packageName");
 		
 		if (level == 0 && !includeAndroidServices) {
 			
@@ -103,21 +104,39 @@ public class TreeOfSingleEntryGenerator {
 			for (int i = 0; i < loop; i++) {
 				
 				try{
-					File file = new File( DirPath+
-							"TestPrograms" + File.separator +
-							"com" + File.separator +
-							"accenture" + File.separator + "lab" + 
-							File.separator + "carfast"
-							+ File.separator + "test"
-							+ File.separator + "TStart_L"+level+"_"+i+".java");
+					File file = null;
 					
-					 
+					if (packageName != null && packageName != "") {
+						String[] splitPackageName = packageName.split("\\.");
+						String directory = DirPath + "TestPrograms" + File.separator;
+						
+						for (String eachStr : splitPackageName) {
+							directory += eachStr + File.separator;
+						}
+						
+						directory += "TStart_L"+level+"_"+i+".java";
+						file = new File(directory);
+					} else {
+						file = new File( DirPath+
+								"TestPrograms" + File.separator +
+								"com" + File.separator +
+								"accenture" + File.separator + "lab" + 
+								File.separator + "carfast"
+								+ File.separator + "test"
+								+ File.separator + "TStart_L"+level+"_"+i+".java");
+					}
+					
 					FileWriter  fileWriter = new FileWriter(file);
 					BufferedWriter writer = new BufferedWriter(fileWriter);
 					
 					StringBuffer output = new StringBuffer();
 					
-					output.append("package com.accenture.lab.carfast.test;\n\n");
+					if (packageName != null && packageName != "") {
+						output.append("package " + packageName + ";\n\n\n");
+					} else {
+						output.append("package com.accenture.lab.carfast.test;\n\n\n");
+					}
+					
 					output.append("public class TStart_L"+level+"_"+i+"{\n");
 					for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
 						output.append("private static int f"+ k + ";\n");
@@ -160,13 +179,27 @@ public class TreeOfSingleEntryGenerator {
 				// create FiveMLOCStart.java class that will call
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
 				try{					
-					File file = new File( DirPath+
-							"TestPrograms" + File.separator +
-							"com" + File.separator +
-							"accenture" + File.separator + "lab" + 
-							File.separator + "carfast"
-							+ File.separator + "test"
-							+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
+					File file = null;
+					
+					if (packageName != null && packageName != "") {
+						String[] splitPackageName = packageName.split("\\.");
+						String directory = DirPath + "TestPrograms" + File.separator;
+						
+						for (String eachStr : splitPackageName) {
+							directory += eachStr + File.separator;
+						}
+						
+						directory += ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java";
+						file = new File(directory);
+					} else {
+						file = new File( DirPath+
+								"TestPrograms" + File.separator +
+								"com" + File.separator +
+								"accenture" + File.separator + "lab" + 
+								File.separator + "carfast"
+								+ File.separator + "test"
+								+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
+					}
 					
 					boolean includeAndroidLibraries = ConfigurationXMLParser
 							.getProperty("includeAndroidLibraries")
@@ -178,7 +211,12 @@ public class TreeOfSingleEntryGenerator {
 					
 					StringBuffer output = new StringBuffer();
 					
-					output.append("package com.accenture.lab.carfast.test;\n\n");
+					if (packageName != null && packageName != "") {
+						output.append("package " + packageName + ";\n\n\n");
+					} else {
+						output.append("package com.accenture.lab.carfast.test;\n\n\n");
+					}
+					
 //					output.append("public class FiveMLOCStart {\n");
 					
 					if (includeAndroidServices) {
@@ -289,13 +327,27 @@ public class TreeOfSingleEntryGenerator {
 					
 					try{
 						
-						File file = new File( DirPath+
-								"TestPrograms" + File.separator +
-								"com" + File.separator +
-								"accenture" + File.separator + "lab" + 
-								File.separator + "carfast"
-								+ File.separator + "test"
-								+ File.separator + "TStart_L"+level+"_"+i+".java");
+						File file = null;
+						
+						if (packageName != null && packageName != "") {
+							String[] splitPackageName = packageName.split("\\.");
+							String directory = DirPath + "TestPrograms" + File.separator;
+							
+							for (String eachStr : splitPackageName) {
+								directory += eachStr + File.separator;
+							}
+							
+							directory += "TStart_L"+level+"_"+i+".java";
+							file = new File(directory);
+						} else {
+							file = new File( DirPath+
+									"TestPrograms" + File.separator +
+									"com" + File.separator +
+									"accenture" + File.separator + "lab" + 
+									File.separator + "carfast"
+									+ File.separator + "test"
+									+ File.separator + "TStart_L"+level+"_"+i+".java");
+						}
 						
 //						File file = new File("./TStart_L"+level+"_"+i+".java");
 						FileWriter  fileWriter = new FileWriter(file);
@@ -303,7 +355,12 @@ public class TreeOfSingleEntryGenerator {
 						
 						StringBuffer output = new StringBuffer();
 						
-						output.append("package com.accenture.lab.carfast.test;\n\n");
+						if (packageName != null && packageName != "") {
+							output.append("package " + packageName + ";\n\n\n");
+						} else {
+							output.append("package com.accenture.lab.carfast.test;\n\n\n");
+						}
+						
 						output.append("public class TStart_L"+level+"_"+i+"{\n");
 						for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
 							output.append("private static int f"+ k + ";\n");

@@ -1,5 +1,6 @@
 package edu.uta.cse.proggen.packageLevelElements;
 
+import edu.uta.cse.proggen.configurationParser.ConfigurationXMLParser;
 import edu.uta.cse.proggen.util.ProgGenUtil;
 
 /**
@@ -44,6 +45,12 @@ public class DBUtilGenerator
 	
 	public String toString()
 	{
+		String packageName = ConfigurationXMLParser.getProperty("packageName");
+		
+		if (packageName != null && packageName != "") {
+			packageString += "package " + packageName + ";\n\n\n";
+		}
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append(packageString);
 		builder.append(importString);

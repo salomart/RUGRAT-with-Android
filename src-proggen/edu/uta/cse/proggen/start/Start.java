@@ -105,12 +105,26 @@ public class Start
 					);
 				}
 				
-				File directory = new File( pathToDir+ 
-						"TestPrograms" + File.separator +
-						"com" + File.separator +
-						"accenture" + File.separator + "lab" + 
-						File.separator + "carfast"
-						+ File.separator + "test");					
+				File directory = null;
+				String packageName = ConfigurationXMLParser.getProperty("packageName");
+				
+				if (packageName != null && packageName != "") {
+					String[] splitPackageName = packageName.split("\\.");
+					String directoryPath = pathToDir + "TestPrograms";
+					
+					for (String eachStr : splitPackageName) {
+						directoryPath += File.separator + eachStr;
+					}
+					
+					directory = new File(directoryPath);
+				} else {
+					directory = new File( pathToDir+
+							"TestPrograms" + File.separator +
+							"com" + File.separator +
+							"accenture" + File.separator + "lab" + 
+							File.separator + "carfast"
+							+ File.separator + "test");
+				}
 				
 				if(!directory.exists())
 				{
@@ -288,17 +302,33 @@ public class Start
 	
 	private static void write(String filename, String contents)
 	{
+		File file = null;
 		FileOutputStream fos = null;
 		BufferedOutputStream outstream = null;
+		String packageName = ConfigurationXMLParser.getProperty("packageName");
 
 		try {
-			fos = new FileOutputStream(new File( pathToDir+
-					"TestPrograms" + File.separator +
-					"com" + File.separator +
-					"accenture" + File.separator + "lab" + 
-					File.separator + "carfast"
-					+ File.separator + "test"
-					+ File.separator + filename + ".java"));
+			if (packageName != null && packageName != "") {
+				String[] splitPackageName = packageName.split("\\.");
+				String directory = pathToDir + "TestPrograms" + File.separator;
+				
+				for (String eachStr : splitPackageName) {
+					directory += eachStr + File.separator;
+				}
+				
+				directory += filename + ".java";
+				file = new File(directory);
+			} else {
+				file = new File( pathToDir+
+						"TestPrograms" + File.separator +
+						"com" + File.separator +
+						"accenture" + File.separator + "lab" + 
+						File.separator + "carfast"
+						+ File.separator + "test"
+						+ File.separator + filename + ".java");
+			}
+			
+			fos = new FileOutputStream(file);
 			
 			outstream = new BufferedOutputStream(fos);
 
