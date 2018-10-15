@@ -84,7 +84,11 @@ public class TreeOfSingleEntryGenerator {
 	}
 	
 	private void createClass(int level, int target) {
-		if (level == 0) {
+		boolean includeAndroidServices = ConfigurationXMLParser
+				.getProperty("includeAndroidServices")
+				.equals("yes");
+		
+		if (level == 0 && !includeAndroidServices) {
 			
 			/*
 			 * create 'loop' number of classes where each class calls 150 or
@@ -152,7 +156,7 @@ public class TreeOfSingleEntryGenerator {
 			createClass(level + 1, loop);			
 			
 		} else {
-			if (level ==  LEVEL) {
+			if (level ==  LEVEL || includeAndroidServices) {
 				// create FiveMLOCStart.java class that will call
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
 				try{					
@@ -164,6 +168,10 @@ public class TreeOfSingleEntryGenerator {
 							+ File.separator + "test"
 							+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
 					
+					boolean includeAndroidLibraries = ConfigurationXMLParser
+							.getProperty("includeAndroidLibraries")
+							.equals("yes");
+					
 //					File file = new File("./FiveMLOCStart.java");
 					FileWriter  fileWriter = new FileWriter(file);
 					BufferedWriter writer = new BufferedWriter(fileWriter);
@@ -172,52 +180,84 @@ public class TreeOfSingleEntryGenerator {
 					
 					output.append("package com.accenture.lab.carfast.test;\n\n");
 //					output.append("public class FiveMLOCStart {\n");
-					boolean includeAndroidLibraries = ConfigurationXMLParser
-							.getProperty("includeAndroidLibraries")
-							.equals("yes");
-					output.append(includeAndroidLibraries ? "import android.app.Activity;\n" +
-							"import android.app.AlertDialog;\n" +
-							"import android.os.Bundle;\n\n" +
-							"public class " + ConfigurationXMLParser.getProperty("classNamePrefix") + "Start extends Activity {\n"
-							: "public class "+ConfigurationXMLParser.getProperty("classNamePrefix")+"Start {\n");
-					for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-						output.append("private static int f"+ k + ";\n");
+					
+					if (includeAndroidServices) {
+						output.append("import android.app.Activity;\n"
+								+ "import android.os.Bundle;\n"
+								+ "import android.content.Intent;\n\n"
+								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
+								+ "Start extends Activity {\n");
+					} else if (includeAndroidLibraries) {
+						output.append("import android.app.Activity;\n"
+								+ "import android.app.AlertDialog;\n"
+								+ "import android.os.Bundle;\n\n"
+								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
+								+ "Start extends Activity {\n");
+					} else {
+						output.append("public class "
+								+ ConfigurationXMLParser.getProperty("classNamePrefix") + "Start {\n");
 					}
 					
-					output.append("\n\n");
-					
-					output.append("public static void entryMethod(");
-					//int i0, int i1, int i2, int i3, int i4, int i5, int i6){\n");
-					
-					
-					output.append(formalParam + "){\n");
-					
-					
-					for( int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-						output.append("f"+k+ " = " + "i"+ k+ ";\n");
-					}					
-					
-					output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
-					
-					output.append(includeAndroidLibraries ? "@Override\r\n" + 
-							"protected void onCreate(Bundle savedInstanceState) {\n" +
-							"super.onCreate(savedInstanceState);\n" +
-							"AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n" + 
-							"builder1.setMessage(\"Hello World!\");\n" + 
-							"builder1.setCancelable(true);\n" + 
-							"AlertDialog alert11 = builder1.create();\r\n" + 
-							"alert11.show();\n" +
-							"entryMethod(" : "public static void main(String[] args){\n entryMethod(");
-					
-					StringBuilder str = new StringBuilder();
-					for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
-						str.append(includeAndroidLibraries ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
+					if (!includeAndroidServices) {
+						for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
+							output.append("private static int f"+ k + ";\n");
+						}
+						
+						output.append("\n\n");
+						
+						output.append("public static void entryMethod(");
+						//int i0, int i1, int i2, int i3, int i4, int i5, int i6){\n");
+						
+						output.append(formalParam + "){\n");
+						
+						for( int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
+							output.append("f"+k+ " = " + "i"+ k+ ";\n");
+						}
+						
+						output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
 					}
-					String s = str.toString();
-					s = s.substring(0, str.length()-1);
-					s += ");\n}";
 					
-					output.append(s);
+					if (includeAndroidServices) {
+						output.append("@Override\n" + 
+								"protected void onCreate(Bundle savedInstanceState) {\n" +
+								"super.onCreate(savedInstanceState);\n");
+						
+						int count = 0;
+						
+						for (int j = 0; j < methCallLimit && count < target; j++, count++) {
+							output.append("Intent service" + j + " = new Intent(this, "
+									+ ConfigurationXMLParser.getProperty("classNamePrefix")
+									+ count + ".class);\r\n"
+									+ "startService(service" + j + ");\n");
+						}
+						
+						output.append("}\n");
+					} else {
+						if (includeAndroidLibraries) {
+							output.append("@Override\n"
+									+ "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ "super.onCreate(savedInstanceState);\n"
+									+ "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
+									+ "builder1.setMessage(\"Hello World!\");\n"
+									+ "builder1.setCancelable(true);\n"
+									+ "AlertDialog alert11 = builder1.create();\n"
+									+ "alert11.show();\n"
+									+ "entryMethod(");
+						} else {
+							output.append("public static void main(String[] args){\n entryMethod(");
+						}
+						
+						StringBuilder str = new StringBuilder();
+						
+						for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
+							str.append(includeAndroidLibraries ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
+						}
+						
+						String s = str.toString();
+						s = s.substring(0, str.length()-1);
+						s += ");\n}";
+						output.append(s);
+					}
 					
 					output.append("\n}");	
 					
@@ -233,7 +273,7 @@ public class TreeOfSingleEntryGenerator {
 				
 				return;
 				
-			} else {
+			} else if (!includeAndroidServices) {
 
 				int count = 0;
 				int loop = (int) Math.ceil((double) target / 150);

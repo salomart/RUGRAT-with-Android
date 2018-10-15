@@ -44,8 +44,12 @@ public class ProgGenUtil
 	public static final int recursionProbability = ConfigurationXMLParser.getPropertyAsInt("recursionProbability");
 	public static final int integerMaxValue = ConfigurationXMLParser.getPropertyAsInt("intMaxValue");
 	
+	public static final boolean includeAndroidServices = ConfigurationXMLParser
+			.getProperty("includeAndroidServices")
+			.equals("yes");
+	
 	//minInheritanceDepth
-	public static final int minInheritanceDepth = ConfigurationXMLParser.getPropertyAsInt("minInheritanceDepth");
+	public static final int minInheritanceDepth = includeAndroidServices ? 1 : ConfigurationXMLParser.getPropertyAsInt("minInheritanceDepth");
 		
 	public static final ArrayList<String> allowedTypes;
 	public static final HashMap<String, Primitives> primitivesMap = new HashMap<String, Primitives>();
