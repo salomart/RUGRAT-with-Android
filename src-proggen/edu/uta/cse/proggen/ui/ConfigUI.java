@@ -159,15 +159,15 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextAllowIndirectRecursion = new JTextField();
         jLabelAllowIndirectRecursion = new JLabel();
         
-        //includeAndroidLibraries
-        jTextIncludeAndroidLibraries = new JTextField();
-        jLabelIncludeAndroidLibraries = new JLabel();
+        //generateBasicAndroidApp
+        jTextBasicAndroidApp = new JTextField();
+        jLabelBasicAndroidApp = new JLabel();
         
-        //includeAndroidServices
-        jTextIncludeAndroidServices = new JTextField();
-        jLabelIncludeAndroidServices = new JLabel();
+        //generateAndroidServices
+        jTextAndroidServices = new JTextField();
+        jLabelAndroidServices = new JLabel();
         
-        //includeAndroidServices
+        //generateAndroidServices
         jTextPackageName = new JTextField();
         jLabelPackageName = new JLabel();
         
@@ -280,13 +280,13 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextReachability.setText("NO");
         jLabelReachability.setToolTipText("This will create a matrix of method caller-callee, it requires much memory space to build.");
         
-        jTextIncludeAndroidLibraries.setName("androidLibraries");
-        jTextIncludeAndroidLibraries.setText("NO");
-        jLabelIncludeAndroidLibraries.setToolTipText("This will give the start file android libraries to allow the files to be imported into an Android project.");
+        jTextBasicAndroidApp.setName("basicAndroidApp");
+        jTextBasicAndroidApp.setText("NO");
+        jLabelBasicAndroidApp.setToolTipText("This will give the start file android libraries to allow the files to be imported into an Android project.");
         
-        jTextIncludeAndroidServices.setName("androidServices");
-        jTextIncludeAndroidServices.setText("NO");
-        jLabelIncludeAndroidServices.setToolTipText("This will extend the classes with the IntentService superclass.");
+        jTextAndroidServices.setName("androidServices");
+        jTextAndroidServices.setText("NO");
+        jLabelAndroidServices.setToolTipText("This will extend the classes with the IntentService superclass.");
 
         jTextPackageName.setName("packageName");
         jTextPackageName.setText("com.accenture.lab.carfast.test");
@@ -383,9 +383,9 @@ public class ConfigUI extends javax.swing.JFrame {
         
         jLabelReachability.setText("Create Reachability Matrix? (YES/NO)");
         
-        jLabelIncludeAndroidLibraries.setText("Include Android Libraries? (YES/NO)");
+        jLabelBasicAndroidApp.setText("Include Basic Android App? (YES/NO)");
         
-        jLabelIncludeAndroidServices.setText("Include Android Services? (YES/NO)");
+        jLabelAndroidServices.setText("Include Android Services? (YES/NO)");
         
         jLabelPackageName.setText("Package Name");
 
@@ -467,8 +467,8 @@ public class ConfigUI extends javax.swing.JFrame {
                             .addComponent(jLabel25)
                             .addComponent(jLabelAllowIndirectRecursion)
                             .addComponent(jLabelReachability)
-                            .addComponent(jLabelIncludeAndroidLibraries)
-                            .addComponent(jLabelIncludeAndroidServices)
+                            .addComponent(jLabelBasicAndroidApp)
+                            .addComponent(jLabelAndroidServices)
                             .addComponent(jLabelPackageName)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
@@ -504,8 +504,8 @@ public class ConfigUI extends javax.swing.JFrame {
                                 .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextAllowIndirectRecursion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextReachability, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextIncludeAndroidLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextIncludeAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextBasicAndroidApp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextPackageName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -680,12 +680,12 @@ public class ConfigUI extends javax.swing.JFrame {
                 		.addComponent(jTextReachability, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 		.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)               
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabelIncludeAndroidLibraries)
-                        .addComponent(jTextIncludeAndroidLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelBasicAndroidApp)
+                        .addComponent(jTextBasicAndroidApp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabelIncludeAndroidServices)
-                        .addComponent(jTextIncludeAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelAndroidServices)
+                        .addComponent(jTextAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
@@ -863,10 +863,10 @@ public class ConfigUI extends javax.swing.JFrame {
 				jTextField23.setText(value);
 			else if(name.equals("callType"))
 				jTextField24.setText(value);
-			else if(name.equals("includeAndroidLibraries"))
-				jTextIncludeAndroidLibraries.setText(value);
-			else if(name.equals("includeAndroidServices"))
-				jTextIncludeAndroidServices.setText(value);
+			else if(name.equals("generateBasicAndroidApp"))
+				jTextBasicAndroidApp.setText(value);
+			else if(name.equals("generateAndroidServices"))
+				jTextAndroidServices.setText(value);
 			else if(name.equals("packageName"))
 				jTextPackageName.setText(value);
 			else if(name.equals("allowedTypes"))
@@ -1202,23 +1202,23 @@ public class ConfigUI extends javax.swing.JFrame {
 		}			
 		properties.put("doReachabilityMatrix", doReachabilityMatrix); 
 		
-		String includeAndroidLibraries = jTextIncludeAndroidLibraries.getText().toLowerCase();
-		if( !includeAndroidLibraries.equals("yes") && !includeAndroidLibraries.equals("no") )
+		String generateBasicAndroidApp = jTextBasicAndroidApp.getText().toLowerCase();
+		if( !generateBasicAndroidApp.equals("yes") && !generateBasicAndroidApp.equals("no") )
 		{
-			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Include Android Libraries?\"", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Include Basic Android App?\"", JOptionPane.ERROR_MESSAGE);
 			return false;
 			
 		}			
-		properties.put("includeAndroidLibraries", includeAndroidLibraries); 
+		properties.put("generateBasicAndroidApp", generateBasicAndroidApp); 
 		
-		String includeAndroidServices = jTextIncludeAndroidServices.getText().toLowerCase();
-		if( !includeAndroidServices.equals("yes") && !includeAndroidServices.equals("no") )
+		String generateAndroidServices = jTextAndroidServices.getText().toLowerCase();
+		if( !generateAndroidServices.equals("yes") && !generateAndroidServices.equals("no") )
 		{
 			JOptionPane.showMessageDialog(this, "Type either YES or NO", "Typo in \"Include Android Services?\"", JOptionPane.ERROR_MESSAGE);
 			return false;
 			
 		}			
-		properties.put("includeAndroidServices", includeAndroidServices); 
+		properties.put("generateAndroidServices", generateAndroidServices); 
 		
 		String packageName = jTextPackageName.getText().toLowerCase();
 		if( !packageName.matches("^[a-zA-Z]+(.[a-zA-Z]+)*$") )
@@ -1499,13 +1499,13 @@ public class ConfigUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextAllowIndirectRecursion;
     private javax.swing.JLabel jLabelAllowIndirectRecursion;
     
-    // IncludeAndroidLibraries
-    private javax.swing.JTextField jTextIncludeAndroidLibraries;
-    private javax.swing.JLabel jLabelIncludeAndroidLibraries;
+    //BasicAndroidApp
+    private javax.swing.JTextField jTextBasicAndroidApp;
+    private javax.swing.JLabel jLabelBasicAndroidApp;
     
-    //IncludeAndroidServices
-    private javax.swing.JTextField jTextIncludeAndroidServices;
-    private javax.swing.JLabel jLabelIncludeAndroidServices;
+    //AndroidServices
+    private javax.swing.JTextField jTextAndroidServices;
+    private javax.swing.JLabel jLabelAndroidServices;
    
     //PackageName
     private javax.swing.JTextField jTextPackageName;

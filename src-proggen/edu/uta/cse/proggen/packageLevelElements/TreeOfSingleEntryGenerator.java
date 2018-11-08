@@ -84,12 +84,12 @@ public class TreeOfSingleEntryGenerator {
 	}
 	
 	private void createClass(int level, int target) {
-		boolean includeAndroidServices = ConfigurationXMLParser
-				.getProperty("includeAndroidServices")
+		boolean generateAndroidServices = ConfigurationXMLParser
+				.getProperty("generateAndroidServices")
 				.equals("yes");
 		String packageName = ConfigurationXMLParser.getProperty("packageName");
 		
-		if (level == 0 && !includeAndroidServices) {
+		if (level == 0 && !generateAndroidServices) {
 			
 			/*
 			 * create 'loop' number of classes where each class calls 150 or
@@ -175,7 +175,7 @@ public class TreeOfSingleEntryGenerator {
 			createClass(level + 1, loop);			
 			
 		} else {
-			if (level ==  LEVEL || includeAndroidServices) {
+			if (level ==  LEVEL || generateAndroidServices) {
 				// create FiveMLOCStart.java class that will call
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
 				try{					
@@ -193,7 +193,7 @@ public class TreeOfSingleEntryGenerator {
 						
 						directory += ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java";
 						file = new File(directory);
-						if (includeAndroidServices) {
+						if (generateAndroidServices) {
 							mdirectory += "AndroidManifest.xml";
 							mfile = new File(mdirectory);
 						}
@@ -205,7 +205,7 @@ public class TreeOfSingleEntryGenerator {
 								File.separator + "carfast"
 								+ File.separator + "test"
 								+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
-						if (includeAndroidServices) {
+						if (generateAndroidServices) {
 							mfile = new File( DirPath+
 									"TestPrograms" + File.separator +
 									"com" + File.separator +
@@ -216,8 +216,8 @@ public class TreeOfSingleEntryGenerator {
 						}
 					}
 					
-					boolean includeAndroidLibraries = ConfigurationXMLParser
-							.getProperty("includeAndroidLibraries")
+					boolean generateBasicAndroidApp = ConfigurationXMLParser
+							.getProperty("generateBasicAndroidApp")
 							.equals("yes");
 					
 //					File file = new File("./FiveMLOCStart.java");
@@ -238,7 +238,7 @@ public class TreeOfSingleEntryGenerator {
 					
 //					output.append("public class FiveMLOCStart {\n");
 					
-					if (includeAndroidServices) {
+					if (generateAndroidServices) {
 						output.append("import android.app.Activity;\n"
 								+ "import android.os.Bundle;\n"
 								+ "import android.content.Intent;\n\n"
@@ -262,7 +262,7 @@ public class TreeOfSingleEntryGenerator {
 								"                <category android:name=\"android.intent.category.LAUNCHER\" />\n" + 
 								"            </intent-filter>\n" + 
 								"        </activity>\n");
-					} else if (includeAndroidLibraries) {
+					} else if (generateBasicAndroidApp) {
 						output.append("import android.app.Activity;\n"
 								+ "import android.app.AlertDialog;\n"
 								+ "import android.os.Bundle;\n\n"
@@ -291,7 +291,7 @@ public class TreeOfSingleEntryGenerator {
 								+ ConfigurationXMLParser.getProperty("classNamePrefix") + "Start {\n");
 					}
 					
-					if (!includeAndroidServices) {
+					if (!generateAndroidServices) {
 						for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
 							output.append("private static int f"+ k + ";\n");
 						}
@@ -310,10 +310,21 @@ public class TreeOfSingleEntryGenerator {
 						output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
 					}
 					
-					if (includeAndroidServices) {
-						output.append("@Override\n" + 
-								"protected void onCreate(Bundle savedInstanceState) {\n" +
-								"super.onCreate(savedInstanceState);\n");
+					if ((generateAndroidServices && generateBasicAndroidApp) || generateAndroidServices) {
+						if (generateAndroidServices && generateBasicAndroidApp) {
+							output.append("@Override\n"
+									+ "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ "super.onCreate(savedInstanceState);\n"
+									+ "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
+									+ "builder1.setMessage(\"Hello World!\");\n"
+									+ "builder1.setCancelable(true);\n"
+									+ "AlertDialog alert11 = builder1.create();\n"
+									+ "alert11.show();\n");
+						} else {
+							output.append("@Override\n" + 
+									"protected void onCreate(Bundle savedInstanceState) {\n" +
+									"super.onCreate(savedInstanceState);\n");
+						}
 						
 						int count = 0;
 						
@@ -328,7 +339,7 @@ public class TreeOfSingleEntryGenerator {
 						}
 						output.append("}\n");
 					} else {
-						if (includeAndroidLibraries) {
+						if (generateBasicAndroidApp) {
 							output.append("@Override\n"
 									+ "protected void onCreate(Bundle savedInstanceState) {\n"
 									+ "super.onCreate(savedInstanceState);\n"
@@ -345,7 +356,7 @@ public class TreeOfSingleEntryGenerator {
 						StringBuilder str = new StringBuilder();
 						
 						for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
-							str.append(includeAndroidLibraries ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
+							str.append(generateBasicAndroidApp ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
 						}
 						
 						String s = str.toString();
@@ -373,7 +384,7 @@ public class TreeOfSingleEntryGenerator {
 				
 				return;
 				
-			} else if (!includeAndroidServices) {
+			} else if (!generateAndroidServices) {
 
 				int count = 0;
 				int loop = (int) Math.ceil((double) target / 150);

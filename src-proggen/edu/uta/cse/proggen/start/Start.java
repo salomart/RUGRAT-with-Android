@@ -50,8 +50,8 @@ public class Start
 		int noOfInheritanceChains = 0;
 		int noOfInterfaces = 0;
 		int maxInterfacesToImplement = 0;
-		boolean includeAndroidServices = ConfigurationXMLParser
-				.getProperty("includeAndroidServices")
+		boolean generateAndroidServices = ConfigurationXMLParser
+				.getProperty("generateAndroidServices")
 				.equals("yes");
 		
 		/* Set of generated classes, it's updated in ClassGenerator.generate() */
@@ -64,8 +64,8 @@ public class Start
 				int totalLoc = ConfigurationXMLParser.getPropertyAsInt("totalLOC");
 																
 				numberOfClasses = ConfigurationXMLParser.getPropertyAsInt("noOfClasses");
-				maxInheritanceDepth = includeAndroidServices ? 1 : ConfigurationXMLParser.getPropertyAsInt("maxInheritanceDepth"); // e.g. 3
-				noOfInheritanceChains = includeAndroidServices ? 1 : ConfigurationXMLParser.getPropertyAsInt("noOfInheritanceChains"); // 2 => "A-B-C" ; "E-F-G"
+				maxInheritanceDepth = generateAndroidServices ? 1 : ConfigurationXMLParser.getPropertyAsInt("maxInheritanceDepth"); // e.g. 3
+				noOfInheritanceChains = generateAndroidServices ? 1 : ConfigurationXMLParser.getPropertyAsInt("noOfInheritanceChains"); // 2 => "A-B-C" ; "E-F-G"
 				noOfInterfaces = ConfigurationXMLParser.getPropertyAsInt("noOfInterfaces");
 				maxInterfacesToImplement = ConfigurationXMLParser.getPropertyAsInt("maxInterfacesToImplement");
 				

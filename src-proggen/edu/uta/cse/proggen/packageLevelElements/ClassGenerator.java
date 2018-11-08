@@ -34,7 +34,7 @@ public class ClassGenerator
 	private int 	methCalledCounter = 0;
 	private int 	locPerMethod = 0;
 	private boolean	preGenerate = false;
-	private boolean includeAndroidServices = false;
+	private boolean generateAndroidServices = false;
 	
 	/** Holds actual class body*/
 	private String 	program = "";
@@ -86,8 +86,8 @@ public class ClassGenerator
 		this.percent = ConfigurationXMLParser.getPropertyAsInt("probability");
 		this.maxNestedIfs = ConfigurationXMLParser.getPropertyAsInt("maxNestedIfs");
 		this.maxAllowedMethodCalls = ConfigurationXMLParser.getPropertyAsInt("maxAllowedMethodCalls");
-		this.includeAndroidServices = ConfigurationXMLParser
-				.getProperty("includeAndroidServices")
+		this.generateAndroidServices = ConfigurationXMLParser
+				.getProperty("generateAndroidServices")
 				.equals("yes");
 		this.superClass = superClass;
 	}
@@ -157,7 +157,7 @@ public class ClassGenerator
 		// append package name
 		appendPackageName();
 		
-		if (this.includeAndroidServices) {
+		if (this.generateAndroidServices) {
 			appendAndroidLibraries();
 		}
 		
@@ -186,7 +186,7 @@ public class ClassGenerator
 		System.out.println("writing main...");
 		generateMain();
 		
-		if (!this.includeAndroidServices) {
+		if (!this.generateAndroidServices) {
 			//generate SingleEntry for CarFast
 			System.out.println("writing singleEntry.....");
 			generateSingleEntry();
@@ -228,7 +228,7 @@ public class ClassGenerator
 	
 	private void generateMethods(ArrayList<ClassGenerator> classList)
 	{
-		if (this.includeAndroidServices) {
+		if (this.generateAndroidServices) {
 			program += "public " + fileName + "() {\n"
 					+ "super(\"" + fileName + "\");\n"
 					+ "}\n\n";
@@ -374,7 +374,7 @@ public class ClassGenerator
 	
 	private void generateMain()
 	{
-		program += this.includeAndroidServices
+		program += this.generateAndroidServices
 				? "@Override\nprotected void onHandleIntent(Intent intent) {\n"
 				+ "Log.i(TAG, \"Starting Service: " + fileName + "\");\n"
 				: "\npublic static void main(String args[]){\n"
@@ -384,7 +384,7 @@ public class ClassGenerator
 			StringBuilder builder = new StringBuilder();
 			
 			MethodSignature signature = method.getMethodSignature();
-			if(!signature.isStatic() && !includeAndroidServices)
+			if(!signature.isStatic() && !generateAndroidServices)
 			{
 				builder.append("obj."); 
 			}
@@ -419,7 +419,7 @@ public class ClassGenerator
 			program += str;
 		}
 		
-		if (includeAndroidServices) {
+		if (generateAndroidServices) {
 			program += "Log.i(TAG, \"Service: " + fileName + " Finished\");\n";
 		}
 		
@@ -594,7 +594,7 @@ public class ClassGenerator
 			program += fields.get(i).getFieldDeclaration() + ";\n";
 		}
 		
-		if (this.includeAndroidServices) {
+		if (this.generateAndroidServices) {
 			program += "private static final String TAG = \"" + fileName + "\";\n";
 		}
 		program += "\n\n";
@@ -604,7 +604,7 @@ public class ClassGenerator
 	{
 		program += "public class " + fileName;
 		
-		if (this.includeAndroidServices) {
+		if (this.generateAndroidServices) {
 			program += " extends IntentService";
 		}
 		else if(this.superClass != null)
