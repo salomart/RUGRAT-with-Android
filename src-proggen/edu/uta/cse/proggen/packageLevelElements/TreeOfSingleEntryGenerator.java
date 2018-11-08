@@ -180,17 +180,23 @@ public class TreeOfSingleEntryGenerator {
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
 				try{					
 					File file = null;
+					File mfile = null;
 					
 					if (packageName != null && packageName != "") {
 						String[] splitPackageName = packageName.split("\\.");
 						String directory = DirPath + "TestPrograms" + File.separator;
-						
+						String mdirectory = DirPath + "TestPrograms" + File.separator;
 						for (String eachStr : splitPackageName) {
 							directory += eachStr + File.separator;
+							mdirectory += eachStr + File.separator;
 						}
 						
 						directory += ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java";
 						file = new File(directory);
+						if (includeAndroidServices) {
+							mdirectory += "AndroidManifest.xml";
+							mfile = new File(mdirectory);
+						}
 					} else {
 						file = new File( DirPath+
 								"TestPrograms" + File.separator +
@@ -199,6 +205,15 @@ public class TreeOfSingleEntryGenerator {
 								File.separator + "carfast"
 								+ File.separator + "test"
 								+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
+						if (includeAndroidServices) {
+							mfile = new File( DirPath+
+									"TestPrograms" + File.separator +
+									"com" + File.separator +
+									"accenture" + File.separator + "lab" + 
+									File.separator + "carfast"
+									+ File.separator + "test"
+									+ File.separator + "AndroidManifest"+".xml");
+						}
 					}
 					
 					boolean includeAndroidLibraries = ConfigurationXMLParser
@@ -209,12 +224,16 @@ public class TreeOfSingleEntryGenerator {
 					FileWriter  fileWriter = new FileWriter(file);
 					BufferedWriter writer = new BufferedWriter(fileWriter);
 					
+					BufferedWriter mwriter = new BufferedWriter(new FileWriter(mfile));
+					
 					StringBuffer output = new StringBuffer();
+					StringBuffer manifest = new StringBuffer();
 					
 					if (packageName != null && packageName != "") {
 						output.append("package " + packageName + ";\n\n\n");
 					} else {
 						output.append("package com.accenture.lab.carfast.test;\n\n\n");
+						packageName = "com.accenture.lab.carfast.test";
 					}
 					
 //					output.append("public class FiveMLOCStart {\n");
@@ -225,12 +244,48 @@ public class TreeOfSingleEntryGenerator {
 								+ "import android.content.Intent;\n\n"
 								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
 								+ "Start extends Activity {\n");
+						manifest.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + 
+								"<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" + 
+								"    package=\""+ packageName +"\">\n" + 
+								"\n" + 
+								"    <application\n" + 
+								"        android:allowBackup=\"true\"\n" + 
+								"        android:icon=\"@mipmap/ic_launcher\"\n" + 
+								"        android:label=\"@string/app_name\"\n" + 
+								"        android:roundIcon=\"@mipmap/ic_launcher_round\"\n" + 
+								"        android:supportsRtl=\"true\"\n" + 
+								"        android:theme=\"@style/AppTheme\">\n" +
+								"			<activity android:name=\"."+ ConfigurationXMLParser.getProperty("classNamePrefix") +"Start\">\n" + 
+								"            <intent-filter>\n" + 
+								"                <action android:name=\"android.intent.action.MAIN\" />\n" + 
+								"\n" + 
+								"                <category android:name=\"android.intent.category.LAUNCHER\" />\n" + 
+								"            </intent-filter>\n" + 
+								"        </activity>\n");
 					} else if (includeAndroidLibraries) {
 						output.append("import android.app.Activity;\n"
 								+ "import android.app.AlertDialog;\n"
 								+ "import android.os.Bundle;\n\n"
 								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
 								+ "Start extends Activity {\n");
+						manifest.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + 
+								"<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" + 
+								"    package=\""+ packageName +"\">\n" + 
+								"\n" + 
+								"    <application\n" + 
+								"        android:allowBackup=\"true\"\n" + 
+								"        android:icon=\"@mipmap/ic_launcher\"\n" + 
+								"        android:label=\"@string/app_name\"\n" + 
+								"        android:roundIcon=\"@mipmap/ic_launcher_round\"\n" + 
+								"        android:supportsRtl=\"true\"\n" + 
+								"        android:theme=\"@style/AppTheme\">\n" +
+								"			<activity android:name=\"."+ ConfigurationXMLParser.getProperty("classNamePrefix") +"Start\">\n" + 
+								"            <intent-filter>\n" + 
+								"                <action android:name=\"android.intent.action.MAIN\" />\n" + 
+								"\n" + 
+								"                <category android:name=\"android.intent.category.LAUNCHER\" />\n" + 
+								"            </intent-filter>\n" + 
+								"        </activity>\n");
 					} else {
 						output.append("public class "
 								+ ConfigurationXMLParser.getProperty("classNamePrefix") + "Start {\n");
@@ -267,8 +322,10 @@ public class TreeOfSingleEntryGenerator {
 									+ ConfigurationXMLParser.getProperty("classNamePrefix")
 									+ count + ".class);\n"
 									+ "startService(service" + j + ");\n");
+							manifest.append("<service\n"+
+									"android:name=\"."+ ConfigurationXMLParser.getProperty("classNamePrefix") + count + "\"\n"+
+									"android:exported=\"false\"/>\n");
 						}
-						
 						output.append("}\n");
 					} else {
 						if (includeAndroidLibraries) {
@@ -298,10 +355,15 @@ public class TreeOfSingleEntryGenerator {
 					}
 					
 					output.append("\n}");	
+					manifest.append("</application>\n" + 
+							"\n" + 
+							"</manifest>");
 					
 					String out = output.toString();
+					String mout = manifest.toString();
 //					System.out.println("Writing the 'Start' class.");
-					
+					mwriter.write(mout);
+					mwriter.close();
 					writer.write(out);
 					writer.close();
 
