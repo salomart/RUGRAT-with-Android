@@ -87,6 +87,9 @@ public class TreeOfSingleEntryGenerator {
 		boolean generateAndroidServices = ConfigurationXMLParser
 				.getProperty("generateAndroidServices")
 				.equals("yes");
+		boolean generateBasicAndroidApp = ConfigurationXMLParser
+				.getProperty("generateBasicAndroidApp")
+				.equals("yes");
 		String packageName = ConfigurationXMLParser.getProperty("packageName");
 		
 		if (level == 0 && !generateAndroidServices) {
@@ -185,15 +188,14 @@ public class TreeOfSingleEntryGenerator {
 					if (packageName != null && packageName != "") {
 						String[] splitPackageName = packageName.split("\\.");
 						String directory = DirPath + "TestPrograms" + File.separator;
-						String mdirectory = DirPath + "TestPrograms" + File.separator;
+						String mdirectory = DirPath;
 						for (String eachStr : splitPackageName) {
 							directory += eachStr + File.separator;
-							mdirectory += eachStr + File.separator;
 						}
 						
 						directory += ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java";
 						file = new File(directory);
-						if (generateAndroidServices) {
+						if (generateAndroidServices || generateBasicAndroidApp) {
 							mdirectory += "AndroidManifest.xml";
 							mfile = new File(mdirectory);
 						}
@@ -205,7 +207,7 @@ public class TreeOfSingleEntryGenerator {
 								File.separator + "carfast"
 								+ File.separator + "test"
 								+ File.separator + ConfigurationXMLParser.getProperty("classNamePrefix")+"Start"+".java");
-						if (generateAndroidServices) {
+						if (generateAndroidServices || generateBasicAndroidApp) {
 							mfile = new File( DirPath+
 									"TestPrograms" + File.separator +
 									"com" + File.separator +
@@ -216,15 +218,12 @@ public class TreeOfSingleEntryGenerator {
 						}
 					}
 					
-					boolean generateBasicAndroidApp = ConfigurationXMLParser
-							.getProperty("generateBasicAndroidApp")
-							.equals("yes");
-					
 //					File file = new File("./FiveMLOCStart.java");
 					FileWriter  fileWriter = new FileWriter(file);
 					BufferedWriter writer = new BufferedWriter(fileWriter);
 					
-					BufferedWriter mwriter = new BufferedWriter(new FileWriter(mfile));
+					BufferedWriter mwriter = generateAndroidServices || generateBasicAndroidApp
+							? new BufferedWriter(new FileWriter(mfile)) : null;
 					
 					StringBuffer output = new StringBuffer();
 					StringBuffer manifest = new StringBuffer();
@@ -373,8 +372,12 @@ public class TreeOfSingleEntryGenerator {
 					String out = output.toString();
 					String mout = manifest.toString();
 //					System.out.println("Writing the 'Start' class.");
-					mwriter.write(mout);
-					mwriter.close();
+					
+					if (mwriter != null) {
+						mwriter.write(mout);
+						mwriter.close();
+					}
+					
 					writer.write(out);
 					writer.close();
 
