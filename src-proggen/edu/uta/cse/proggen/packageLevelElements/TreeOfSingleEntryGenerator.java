@@ -239,6 +239,7 @@ public class TreeOfSingleEntryGenerator {
 					
 					if (generateAndroidServices) {
 						output.append("import android.app.Activity;\n"
+								+ (generateBasicAndroidApp ? "import android.app.AlertDialog;\n" : "")
 								+ "import android.os.Bundle;\n"
 								+ "import android.content.Intent;\n\n"
 								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
