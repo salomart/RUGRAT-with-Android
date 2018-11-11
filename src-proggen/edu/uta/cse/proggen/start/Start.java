@@ -29,6 +29,8 @@ public class Start
 {
 	
 	private static String pathToDir = "";
+	private static boolean generateAndroidServices = false;
+	private static boolean generateBasicAndroidApp = false;
 	
 	public static String getPathToDir(){
 		return pathToDir;
@@ -36,11 +38,28 @@ public class Start
 	
 	public static void main(String[] args) 
 	{
+		String directoryLocation = ConfigurationXMLParser.getProperty("directoryLocation");
+		generateAndroidServices = ConfigurationXMLParser
+				.getProperty("generateAndroidServices")
+				.equals("yes");
+		generateBasicAndroidApp = ConfigurationXMLParser
+				.getProperty("generateBasicAndroidApp")
+				.equals("yes");
+		
 		/* For ant script: specify 'config.xml' file and output directory */		
 		if(args.length == 1){
 			pathToDir = args[0] + File.separator;			
+		} else if (directoryLocation != null
+				&& !directoryLocation.isEmpty()
+				&& directoryLocation != "") {
+			pathToDir = directoryLocation + File.separator;
+			pathToDir += generateAndroidServices || generateBasicAndroidApp ? "app" + File.separator
+					+ "src" + File.separator + "main" + File.separator : "";
+		} else {
+			pathToDir = "TestPrograms" + File.separator;
+			pathToDir += generateAndroidServices || generateBasicAndroidApp ? "app" + File.separator
+					+ "src" + File.separator + "main" + File.separator : "";
 		}
-		
 		
 		/* List of generated class objects: ClassGenerators */		
 		ArrayList<ClassGenerator> 		list 			= new ArrayList<ClassGenerator>();
@@ -50,9 +69,6 @@ public class Start
 		int noOfInheritanceChains = 0;
 		int noOfInterfaces = 0;
 		int maxInterfacesToImplement = 0;
-		boolean generateAndroidServices = ConfigurationXMLParser
-				.getProperty("generateAndroidServices")
-				.equals("yes");
 		
 		/* Set of generated classes, it's updated in ClassGenerator.generate() */
 		HashSet<String> generatedClasses = new HashSet<String>();
@@ -110,7 +126,8 @@ public class Start
 				
 				if (packageName != null && packageName != "") {
 					String[] splitPackageName = packageName.split("\\.");
-					String directoryPath = pathToDir + "TestPrograms";
+					String directoryPath = pathToDir
+							+ (generateAndroidServices || generateBasicAndroidApp ? "java" : "src");
 					
 					for (String eachStr : splitPackageName) {
 						directoryPath += File.separator + eachStr;
@@ -119,7 +136,8 @@ public class Start
 					directory = new File(directoryPath);
 				} else {
 					directory = new File( pathToDir+
-							"TestPrograms" + File.separator +
+							(generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+							+ File.separator +
 							"com" + File.separator +
 							"accenture" + File.separator + "lab" + 
 							File.separator + "carfast"
@@ -310,7 +328,9 @@ public class Start
 		try {
 			if (packageName != null && packageName != "") {
 				String[] splitPackageName = packageName.split("\\.");
-				String directory = pathToDir + "TestPrograms" + File.separator;
+				String directory = pathToDir
+						+ (generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+						+ File.separator;
 				
 				for (String eachStr : splitPackageName) {
 					directory += eachStr + File.separator;
@@ -320,7 +340,8 @@ public class Start
 				file = new File(directory);
 			} else {
 				file = new File( pathToDir+
-						"TestPrograms" + File.separator +
+						(generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+						+ File.separator +
 						"com" + File.separator +
 						"accenture" + File.separator + "lab" + 
 						File.separator + "carfast"

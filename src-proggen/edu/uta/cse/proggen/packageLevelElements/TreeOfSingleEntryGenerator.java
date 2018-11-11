@@ -111,7 +111,9 @@ public class TreeOfSingleEntryGenerator {
 					
 					if (packageName != null && packageName != "") {
 						String[] splitPackageName = packageName.split("\\.");
-						String directory = DirPath + "TestPrograms" + File.separator;
+						String directory = DirPath
+								+ (generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+								+ File.separator;
 						
 						for (String eachStr : splitPackageName) {
 							directory += eachStr + File.separator;
@@ -121,7 +123,8 @@ public class TreeOfSingleEntryGenerator {
 						file = new File(directory);
 					} else {
 						file = new File( DirPath+
-								"TestPrograms" + File.separator +
+								(generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+								+ File.separator +
 								"com" + File.separator +
 								"accenture" + File.separator + "lab" + 
 								File.separator + "carfast"
@@ -187,7 +190,9 @@ public class TreeOfSingleEntryGenerator {
 					
 					if (packageName != null && packageName != "") {
 						String[] splitPackageName = packageName.split("\\.");
-						String directory = DirPath + "TestPrograms" + File.separator;
+						String directory = DirPath
+								+ (generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
+								+ File.separator;
 						String mdirectory = DirPath;
 						for (String eachStr : splitPackageName) {
 							directory += eachStr + File.separator;

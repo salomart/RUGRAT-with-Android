@@ -171,6 +171,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextPackageName = new JTextField();
         jLabelPackageName = new JLabel();
         
+        //directoryLocation
+        jTextDirectoryLocation = new JTextField();
+        jLabelDirectoryLocation = new JLabel();
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         
@@ -292,6 +296,10 @@ public class ConfigUI extends javax.swing.JFrame {
         jTextPackageName.setText("com.accenture.lab.carfast.test");
         jLabelPackageName.setToolTipText("This is the package name used in the generated files.");
         
+        jTextDirectoryLocation.setName("directoryLocation");
+        jTextDirectoryLocation.setText("TestPrograms");
+        jLabelDirectoryLocation.setToolTipText("This is the directory where the generated files will be saved..");
+        
         jCheckBox1.setText("char");
         jCheckBox1.setName("char"); // NOI18N
 
@@ -387,6 +395,8 @@ public class ConfigUI extends javax.swing.JFrame {
         
         jLabelAndroidServices.setText("Include Android Services? (YES/NO)");
         
+        jLabelDirectoryLocation.setText("Generation Directory");
+        
         jLabelPackageName.setText("Package Name");
 
         jButton1.setText("Generate");
@@ -470,6 +480,7 @@ public class ConfigUI extends javax.swing.JFrame {
                             .addComponent(jLabelBasicAndroidApp)
                             .addComponent(jLabelAndroidServices)
                             .addComponent(jLabelPackageName)
+                            .addComponent(jLabelDirectoryLocation)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel26))
@@ -507,6 +518,7 @@ public class ConfigUI extends javax.swing.JFrame {
                                 .addComponent(jTextBasicAndroidApp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextAndroidServices, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextPackageName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextDirectoryLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextMinNoOfClassFields, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -546,6 +558,10 @@ public class ConfigUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelDirectoryLocation)
+                        .addComponent(jTextDirectoryLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabelPackageName)
                         .addComponent(jTextPackageName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -869,6 +885,8 @@ public class ConfigUI extends javax.swing.JFrame {
 				jTextAndroidServices.setText(value);
 			else if(name.equals("packageName"))
 				jTextPackageName.setText(value);
+			else if(name.equals("directoryLocation"))
+				jTextDirectoryLocation.setText(value);
 			else if(name.equals("allowedTypes"))
 			{
 				NodeList types = node.getChildNodes();
@@ -1228,6 +1246,15 @@ public class ConfigUI extends javax.swing.JFrame {
 			
 		}			
 		properties.put("packageName", packageName); 
+		
+		String directoryLocation = jTextDirectoryLocation.getText();
+		if( !directoryLocation.matches("^(C:\\\\)*[a-zA-Z-]+(\\\\([a-zA-Z-]+))*$") )
+		{
+			JOptionPane.showMessageDialog(this, "The directory entered is invalid", "Invalid Directory", JOptionPane.ERROR_MESSAGE);
+			return false;
+			
+		}			
+		properties.put("directoryLocation", directoryLocation); 
 			
 		boolean isChecked = false;
 				
@@ -1510,6 +1537,10 @@ public class ConfigUI extends javax.swing.JFrame {
     //PackageName
     private javax.swing.JTextField jTextPackageName;
     private javax.swing.JLabel jLabelPackageName;
+    
+    //DirectoryLocation
+    private javax.swing.JTextField jTextDirectoryLocation;
+    private javax.swing.JLabel jLabelDirectoryLocation;
     
     // End of variables declaration//GEN-END:variables
 }
