@@ -50,6 +50,5 @@ Generated programs will not match the specified 'Total lines of code' property. 
 
 Please send your queries to:
 
-- Mark Grechanik (mark.grechanik@accenture.com)
-- Ishtiaque Hussain (ishtiaque.hussain@mavs.uta.edu)
+- Salomon Martinez (salomon.martinez@mavs.uta.edu)
 - Christoph Csallner (csallner@uta.edu)
