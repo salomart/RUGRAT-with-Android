@@ -184,10 +184,10 @@ public class TreeOfSingleEntryGenerator {
 			if (level ==  LEVEL || generateAndroidServices) {
 				// create FiveMLOCStart.java class that will call
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
-				int numOfTabs = 0;
 				try{					
 					File file = null;
 					File mfile = null;
+					File rfile = null;
 					
 					if (packageName != null && packageName != "") {
 						String[] splitPackageName = packageName.split("\\.");
@@ -195,6 +195,7 @@ public class TreeOfSingleEntryGenerator {
 								+ (generateAndroidServices || generateBasicAndroidApp ? "java" : "src")
 								+ File.separator;
 						String mdirectory = DirPath;
+						String rdirectory = DirPath;
 						for (String eachStr : splitPackageName) {
 							directory += eachStr + File.separator;
 						}
@@ -204,6 +205,11 @@ public class TreeOfSingleEntryGenerator {
 						if (generateAndroidServices || generateBasicAndroidApp) {
 							mdirectory += "AndroidManifest.xml";
 							mfile = new File(mdirectory);
+							rdirectory += "res" + File.separator + "layout";
+							rfile = new File(rdirectory);
+							rfile.mkdirs();
+							rdirectory += File.separator + "main_layout.xml";
+							rfile = new File(rdirectory);
 						}
 					} else {
 						file = new File( DirPath+
@@ -221,6 +227,13 @@ public class TreeOfSingleEntryGenerator {
 									File.separator + "carfast"
 									+ File.separator + "test"
 									+ File.separator + "AndroidManifest"+".xml");
+							rfile = new File( DirPath+
+									"TestPrograms" + File.separator +
+									"com" + File.separator +
+									"accenture" + File.separator + "lab" + 
+									File.separator + "carfast"
+									+ File.separator + "test"
+									+ File.separator + "main_layout"+".xml");
 						}
 					}
 					
@@ -230,9 +243,12 @@ public class TreeOfSingleEntryGenerator {
 					
 					BufferedWriter mwriter = generateAndroidServices || generateBasicAndroidApp
 							? new BufferedWriter(new FileWriter(mfile)) : null;
+					BufferedWriter rwriter = generateAndroidServices || generateBasicAndroidApp
+									? new BufferedWriter(new FileWriter(rfile)) : null;
 					
 					StringBuffer output = new StringBuffer();
 					StringBuffer manifest = new StringBuffer();
+					StringBuffer layout = new StringBuffer();
 					
 					if (packageName != null && packageName != "") {
 						output.append("package " + packageName + ";\n\n");
@@ -244,7 +260,10 @@ public class TreeOfSingleEntryGenerator {
 //					output.append("public class FiveMLOCStart {\n");
 					
 					if (generateAndroidServices) {
-						output.append("import android.app.Activity;\n"
+						output.append("import android.view.View;\n" + 
+								"import android.widget.Button;\n" + 
+								"import android.widget.TextView;\n" +
+								"import android.app.Activity;\n"
 								+ (generateBasicAndroidApp ? "import android.app.AlertDialog;\n" : "")
 								+ "import android.os.Bundle;\n"
 								+ "import android.content.Intent;\n\n"
@@ -268,8 +287,29 @@ public class TreeOfSingleEntryGenerator {
 								"                <category android:name=\"android.intent.category.LAUNCHER\" />\n" + 
 								"            </intent-filter>\n" + 
 								"        </activity>\n");
+						layout.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+								"<ScrollView\n" + 
+								"  xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" + 
+								"  android:layout_width=\"fill_parent\"\n" + 
+								"  android:layout_height=\"fill_parent\">\n" +
+								"	<LinearLayout\n" + 
+								"              android:layout_width=\"match_parent\"\n" + 
+								"              android:layout_height=\"match_parent\"\n" + 
+								"              android:orientation=\"vertical\" >\n" + 
+								"    <TextView android:id=\"@+id/welcometext\"\n" + 
+								"              android:layout_width=\"wrap_content\"\n" + 
+								"              android:layout_height=\"wrap_content\"\n" +
+								"			   android:textStyle=\"bold\"\n"+
+								"              android:text=\"Hello!\" />\n"+
+								"    <Button android:id=\"@+id/changebtn\"\n" + 
+								"            android:layout_width=\"wrap_content\"\n" + 
+								"            android:layout_height=\"wrap_content\"\n" + 
+								"            android:text=\"Click Me!\" />\n");
 					} else if (generateBasicAndroidApp) {
-						output.append("import android.app.Activity;\n"
+						output.append("import android.view.View;\n" + 
+								"import android.widget.Button;\n" + 
+								"import android.widget.TextView;\n"+
+								"import android.app.Activity;\n"
 								+ "import android.app.AlertDialog;\n"
 								+ "import android.os.Bundle;\n\n"
 								+ "public class " + ConfigurationXMLParser.getProperty("classNamePrefix")
@@ -292,83 +332,103 @@ public class TreeOfSingleEntryGenerator {
 								"                <category android:name=\"android.intent.category.LAUNCHER\" />\n" + 
 								"            </intent-filter>\n" + 
 								"        </activity>\n");
+						layout.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+								"<ScrollView\n" + 
+								"  xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" + 
+								"  android:layout_width=\"fill_parent\"\n" + 
+								"  android:layout_height=\"fill_parent\">\n" +
+								"	<LinearLayout\n" + 
+								"              android:layout_width=\"match_parent\"\n" + 
+								"              android:layout_height=\"match_parent\"\n" + 
+								"              android:orientation=\"vertical\" >\n" + 
+								"    <TextView android:id=\"@+id/welcometext\"\n" + 
+								"              android:layout_width=\"wrap_content\"\n" + 
+								"              android:layout_height=\"wrap_content\"\n" +
+								"			   android:textStyle=\"bold\"\n"+
+								"              android:text=\"Hello!\" />\n"+
+								"    <Button android:id=\"@+id/changebtn\"\n" + 
+								"            android:layout_width=\"wrap_content\"\n" + 
+								"            android:layout_height=\"wrap_content\"\n" + 
+								"            android:text=\"Click Me!\" />\n");
 					} else {
 						output.append("public class "
 								+ ConfigurationXMLParser.getProperty("classNamePrefix") + "Start {\n");
 					}
-					numOfTabs++;
 					
 					if (!generateAndroidServices) {
 						for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "private static int f"+ k + ";\n");
+							output.append("private static int f"+ k + ";\n");
 						}
 						
 						output.append("\n\n");
 						
-						output.append(ProgGenUtil.tabSpacing(numOfTabs) + "public static void entryMethod(");
+						output.append("public static void entryMethod(");
 						//int i0, int i1, int i2, int i3, int i4, int i5, int i6){\n");
 						
-						output.append(formalParam + ") {\n");
-						numOfTabs++;
+						output.append(formalParam + "){\n");
 						
 						for( int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "f"+k+ " = " + "i"+ k+ ";\n");
+							output.append("f"+k+ " = " + "i"+ k+ ";\n");
 						}
 						
-						output.append(ProgGenUtil.tabSpacing(numOfTabs) + "TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n"
-								+ ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n\n");
-						numOfTabs--;
+						output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
 					}
 					
 					if ((generateAndroidServices && generateBasicAndroidApp) || generateAndroidServices) {
 						if (generateAndroidServices && generateBasicAndroidApp) {
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setMessage(\"Hello World!\");\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setCancelable(true);\n\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog alert11 = builder1.create();\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "alert11.show();\n\n");
+							output.append(ProgGenUtil.tabSpacing(1) + "@Override\n"
+									+ ProgGenUtil.tabSpacing(1) + "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ ProgGenUtil.tabSpacing(2) + "super.onCreate(savedInstanceState);\n"
+									+ ProgGenUtil.tabSpacing(2) + "setContentView(R.layout.main_layout);\n" +
+									ProgGenUtil.tabSpacing(2) + "Button btn = (Button) findViewById(R.id.changebtn);\n" + 
+									ProgGenUtil.tabSpacing(2) + "final TextView wt = (TextView) findViewById(R.id.welcometext);\n" + 
+									ProgGenUtil.tabSpacing(2) + "btn.setOnClickListener(new View.OnClickListener() {\n" + 
+									ProgGenUtil.tabSpacing(3) + "public void onClick(View v) {\n" + 
+									ProgGenUtil.tabSpacing(4) + "wt.setText(\"Welcome to android\");\n" + 
+									ProgGenUtil.tabSpacing(3) +"}\n" + 
+									ProgGenUtil.tabSpacing(2) + "});\n");
 						} else {
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n" + 
-									ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n" +
-									ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n");
+							output.append("@Override\n" + 
+									"protected void onCreate(Bundle savedInstanceState) {\n" +
+									"super.onCreate(savedInstanceState);\n");
 						}
-						numOfTabs++;
-						
+						output.append(ProgGenUtil.tabSpacing(1) + "}\n");
 						int count = 0;
 						
 						for (int j = 0; j < methCallLimit && count < target; j++, count++) {
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "Intent service" + j + " = new Intent(this, "
-									+ ConfigurationXMLParser.getProperty("classNamePrefix")
-									+ count + ".class);\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs) + "startService(service" + j + ");\n");
+							output.append("\n" + ProgGenUtil.tabSpacing(1) + "public void service"+ ConfigurationXMLParser.getProperty("classNamePrefix") + count +"(View view) {\n" + 
+									ProgGenUtil.tabSpacing(2) + "startService(new Intent(this, " + ConfigurationXMLParser.getProperty("classNamePrefix")
+									+ count + ".class));\n"
+									+ProgGenUtil.tabSpacing(1) +"}\n");
 							manifest.append("<service\n"+
 									"android:name=\"."+ ConfigurationXMLParser.getProperty("classNamePrefix") + count + "\"\n"+
 									"android:exported=\"false\"/>\n");
+							layout.append("<Button android:id=\"@+id/button"+ count +"\"\n" + 
+									"            android:layout_width=\"wrap_content\"\n" + 
+									"            android:layout_height=\"wrap_content\"\n" + 
+									"            android:onClick=\"service"+ConfigurationXMLParser.getProperty("classNamePrefix") + count+"\"\n" +
+									"            android:text=\""+ ConfigurationXMLParser.getProperty("classNamePrefix") + count + " \"/>\n");
 						}
 						
-						output.append(ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n");
-						numOfTabs--;
 					} else {
 						if (generateBasicAndroidApp) {
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setMessage(\"Hello World!\");\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setCancelable(true);\n\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog alert11 = builder1.create();\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "alert11.show();\n\n"
-									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "entryMethod(");
+							output.append("@Override\n"
+									+ "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ "super.onCreate(savedInstanceState);\n"
+									+ "setContentView(R.layout.main_layout);\n"
+									+ "Button btn = (Button) findViewById(R.id.changebtn);\n" + 
+									"        final TextView wt = (TextView) findViewById(R.id.welcometext);\n" + 
+									"        btn.setOnClickListener(new View.OnClickListener() {\n" + 
+									"                                   public void onClick(View v) {\n" + 
+									"                                       wt.setText(\"Welcome to android\");\n" + 
+									"                                   }\n" + 
+									"                               });\n"
+									+ "entryMethod(");
 						} else {
-							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "public static void main(String[] args) {\n" + "entryMethod(");
+							output.append("public static void main(String[] args){\n entryMethod(");
 						}
-						numOfTabs++;
 						
 						StringBuilder str = new StringBuilder();
-						str.append(ProgGenUtil.tabSpacing(numOfTabs));
 						
 						for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
 							str.append(generateBasicAndroidApp ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
@@ -376,27 +436,27 @@ public class TreeOfSingleEntryGenerator {
 						
 						String s = str.toString();
 						s = s.substring(0, str.length()-1);
-						s += ");\n"
-								+ ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n";
-						numOfTabs--;
+						s += ");\n}";
 						output.append(s);
 					}
 					
-					output.append(ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n");	
-					numOfTabs--;
+					output.append("}");	
 					manifest.append("</application>\n" + 
 							"\n" + 
 							"</manifest>");
-					
+					layout.append("</LinearLayout>\n" + 
+							"</ScrollView>");
 					String out = output.toString();
 					String mout = manifest.toString();
+					String rout = layout.toString();
 //					System.out.println("Writing the 'Start' class.");
 					
 					if (mwriter != null) {
 						mwriter.write(mout);
 						mwriter.close();
 					}
-					
+					rwriter.write(rout);
+					rwriter.close();
 					writer.write(out);
 					writer.close();
 
