@@ -895,4 +895,14 @@ public class ProgGenUtil
 		
 		return validPrimitivesInScope;
 	}
+	
+	public static String tabSpacing(int numOfTabs) {
+		String spaces = "";
+		
+		for (int i=0; i<numOfTabs; i++) {
+			spaces += "    ";
+		}
+		
+		return spaces;
+	}
 }
