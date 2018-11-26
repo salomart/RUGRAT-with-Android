@@ -56,8 +56,8 @@ public class ForLoop extends Statement {
 
 	public String toString(){
 		String output = "";
-		output  += "for(int i = 0; i < "+ positiveInteger() +"; i++){\n ";
-		output += stmt.toString() + "}\n";
+		output  += ProgGenUtil.tabSpacing(2) + "for (int i = 0; i < "+ positiveInteger() +"; i++) {\n ";
+		output += ProgGenUtil.tabSpacing(1) + stmt.toString() + ProgGenUtil.tabSpacing(2) + "}\n\n";
 		return output;
 	}
 }

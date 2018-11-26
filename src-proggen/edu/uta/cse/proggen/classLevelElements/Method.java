@@ -487,10 +487,11 @@ public class Method
 	
 	public String toString()
 	{
-		String str = "";
+		String str = ProgGenUtil.tabSpacing(1);
 		
 		str += this.methodSignature;
-		str+= "{\n "+ methodBody + returnStatement + "\n}\n\n";
+		str+= " {\n" + methodBody + ProgGenUtil.tabSpacing(2)+ returnStatement
+				+ ProgGenUtil.tabSpacing(1) + "}\n\n";
 		
 		return str;
 	}

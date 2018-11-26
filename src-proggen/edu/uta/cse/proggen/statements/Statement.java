@@ -35,7 +35,7 @@ public class Statement
 		switch (option) 
 		{
 		case 0: // Assignment statement
-			stmt.stmt = new AssignmentExpression(method).toString();
+			stmt.stmt = ProgGenUtil.tabSpacing(2) + new AssignmentExpression(method).toString();
 			//FIXME: if there is no local variable available to assign, it will simply use print statement.
 			// following line will add an extra line to the LOC
 			method.setLoc(method.getLoc()+1);
@@ -52,7 +52,7 @@ public class Statement
 			{
 				if(ProgGenUtil.coinFlip())
 				{
-					stmt.stmt += ProgGenUtil.getMethodCall(method, classList);
+					stmt.stmt += ProgGenUtil.tabSpacing(2) + ProgGenUtil.getMethodCall(method, classList);
 				}
 				else
 				{

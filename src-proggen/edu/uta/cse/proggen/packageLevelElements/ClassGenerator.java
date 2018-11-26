@@ -35,6 +35,7 @@ public class ClassGenerator
 	private int 	locPerMethod = 0;
 	private boolean	preGenerate = false;
 	private boolean generateAndroidServices = false;
+	private int     numOfTabs = 0;
 	
 	/** Holds actual class body*/
 	private String 	program = "";
@@ -170,6 +171,7 @@ public class ClassGenerator
 		System.out.println("appending classname...");
 		// append class name
 		appendClassName();
+		numOfTabs++;
 		
 		System.out.println("Injecting contents...");
 		//append injected contents from external file
@@ -229,9 +231,9 @@ public class ClassGenerator
 	private void generateMethods(ArrayList<ClassGenerator> classList)
 	{
 		if (this.generateAndroidServices) {
-			program += "public " + fileName + "() {\n"
-					+ "super(\"" + fileName + "\");\n"
-					+ "}\n\n";
+			program += ProgGenUtil.tabSpacing(numOfTabs) + "public " + fileName + "() {\n"
+					+ ProgGenUtil.tabSpacing(numOfTabs+1) + "super(\"" + fileName + "\");\n"
+					+ ProgGenUtil.tabSpacing(numOfTabs) + "}\n\n";
 		}
 		
 		for(MethodSignature signature : methodSignatures)
@@ -375,9 +377,10 @@ public class ClassGenerator
 	private void generateMain()
 	{
 		program += this.generateAndroidServices
-				? "@Override\nprotected void onHandleIntent(Intent intent) {\n"
-				+ "Log.i(TAG, \"Starting Service: " + fileName + "\");\n"
-				: "\npublic static void main(String args[]){\n"
+				? ProgGenUtil.tabSpacing(1) + "@Override\n"
+						+ ProgGenUtil.tabSpacing(1) + "protected void onHandleIntent(Intent intent) {\n"
+				+ ProgGenUtil.tabSpacing(2) + "Log.i(TAG, \"Starting Service: " + fileName + "\");\n\n"
+				: "\n" + ProgGenUtil.tabSpacing(1) + "public static void main(String args[]){\n"
 				+ this.fileName + " obj = new " + this.fileName +"();\n";
 		for(Method method : this.methodList)
 		{
@@ -416,14 +419,14 @@ public class ClassGenerator
 			str = str.substring(0, str.length() - 1);
 			str += ");\n";
 			
-			program += str;
+			program += ProgGenUtil.tabSpacing(2) + str;
 		}
 		
 		if (generateAndroidServices) {
-			program += "Log.i(TAG, \"Service: " + fileName + " Finished\");\n";
+			program += "\n" + ProgGenUtil.tabSpacing(2) + "Log.i(TAG, \"Service: " + fileName + " Finished\");\n";
 		}
 		
-		program += "}\n";
+		program += ProgGenUtil.tabSpacing(1) + "}\n";
 	}
 	
 	
@@ -504,7 +507,7 @@ public class ClassGenerator
 	private void generateEndOfClass() 
 	{
 		// closing brace of the class
-		program += "\n}"; 
+		program += "}"; 
 	}
 
 	private MethodSignature overRiddenMethod(ArrayList<ClassGenerator> classList,
@@ -595,9 +598,9 @@ public class ClassGenerator
 		}
 		
 		if (this.generateAndroidServices) {
-			program += "private static final String TAG = \"" + fileName + "\";\n";
+			program += ProgGenUtil.tabSpacing(numOfTabs) + "private static final String TAG = \"" + fileName + "\";\n";
 		}
-		program += "\n\n";
+		program += "\n";
 	}
 
 	private void appendClassName() 
@@ -638,9 +641,9 @@ public class ClassGenerator
 		String packageName = ConfigurationXMLParser.getProperty("packageName");
 		
 		if (packageName != null && packageName != "") {
-			program += "package " + packageName + ";\n\n\n";
+			program += "package " + packageName + ";\n\n";
 		} else {
-			program += "package com.accenture.lab.carfast.test;\n\n\n";
+			program += "package com.accenture.lab.carfast.test;\n\n";
 		}
 	}
 	

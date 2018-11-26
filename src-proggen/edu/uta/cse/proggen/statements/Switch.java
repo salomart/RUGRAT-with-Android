@@ -9,6 +9,7 @@ import edu.uta.cse.proggen.expressions.VariableBinOpField;
 import edu.uta.cse.proggen.expressions.VariableBinOpVariable;
 import edu.uta.cse.proggen.nodes.Expression;
 import edu.uta.cse.proggen.packageLevelElements.ClassGenerator;
+import edu.uta.cse.proggen.util.ProgGenUtil;
 
 
 /**
@@ -41,20 +42,20 @@ public class Switch extends Statement{
 			option += 2;
 
 		for(int i = 0; i < option ; i++){
-			cases.add("case "+ i+ ":\n"+ Statement.getRandomizedStatement(method, classList).toString()+ " break;\n");
+			cases.add(ProgGenUtil.tabSpacing(2) + "case "+ i+ ":\n"+ ProgGenUtil.tabSpacing(1) + Statement.getRandomizedStatement(method, classList).toString()+ ProgGenUtil.tabSpacing(3) + "break;\n");
 			method.setLoc(method.getLoc() + 2);
 			//Start.loc_per_meth_counter += 2; // each case adds 2 lines 'case:' and 'break'
 		}
-		cases.add("default :\n"+ Statement.getRandomizedStatement(method, classList).toString());
+		cases.add(ProgGenUtil.tabSpacing(2) + "default :\n"+ Statement.getRandomizedStatement(method, classList).toString());
 	}
 
 
 	public String toString(){
-		String output = "switch(" +operand.toString()+ "){\n";
+		String output = ProgGenUtil.tabSpacing(2) + "switch (" +operand.toString()+ ") {\n";
 		for(int i =0; i < cases.size(); i++){
 			output += cases.get(i);
 		}
-		output += "}\n";
+		output += ProgGenUtil.tabSpacing(2) + "}\n";
 
 		return output;
 	}

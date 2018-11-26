@@ -42,8 +42,10 @@ public class IfElse extends Statement {
 			//failed to construct a variable based expression
 			return new PrintStatement(method).toString();
 		}
-		String output = "if"+ "(" + boolExpr.toString() + "){"+"\n";
-		output = output + thenStmt.toString()+"}\n"+ "else{\n " + elseStmt.toString()+"}\n" ;
+		String output = ProgGenUtil.tabSpacing(2) + "if "+ "(" + boolExpr.toString() + ") {"+"\n";
+		output = output + ProgGenUtil.tabSpacing(1) + thenStmt.toString()
+			+ProgGenUtil.tabSpacing(2)+"} else {\n "+ ProgGenUtil.tabSpacing(1) 
+			+ elseStmt.toString() + ProgGenUtil.tabSpacing(2) + "}\n" ;
 		return output;
 	}
 }

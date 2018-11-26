@@ -68,8 +68,8 @@ public class IfStmtIfStmt extends Statement {
 			return new PrintStatement(method).toString();
 		}
 		
-		output = "if( "+ cond.toString()+ "){\n";
-		output += body + "}\n";
+		output = ProgGenUtil.tabSpacing(2) + "if ( "+ cond.toString()+ ") {\n";
+		output += ProgGenUtil.tabSpacing(1) + body + ProgGenUtil.tabSpacing(2) + "}\n";
 		return output;
 	}
 }

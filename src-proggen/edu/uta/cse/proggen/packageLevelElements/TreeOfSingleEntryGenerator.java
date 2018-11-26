@@ -184,6 +184,7 @@ public class TreeOfSingleEntryGenerator {
 			if (level ==  LEVEL || generateAndroidServices) {
 				// create FiveMLOCStart.java class that will call
 				// FiveMLOCStart_L(prevLevel)_0.entryMethod();				
+				int numOfTabs = 0;
 				try{					
 					File file = null;
 					File mfile = null;
@@ -234,9 +235,9 @@ public class TreeOfSingleEntryGenerator {
 					StringBuffer manifest = new StringBuffer();
 					
 					if (packageName != null && packageName != "") {
-						output.append("package " + packageName + ";\n\n\n");
+						output.append("package " + packageName + ";\n\n");
 					} else {
-						output.append("package com.accenture.lab.carfast.test;\n\n\n");
+						output.append("package com.accenture.lab.carfast.test;\n\n");
 						packageName = "com.accenture.lab.carfast.test";
 					}
 					
@@ -295,70 +296,79 @@ public class TreeOfSingleEntryGenerator {
 						output.append("public class "
 								+ ConfigurationXMLParser.getProperty("classNamePrefix") + "Start {\n");
 					}
+					numOfTabs++;
 					
 					if (!generateAndroidServices) {
 						for(int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-							output.append("private static int f"+ k + ";\n");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "private static int f"+ k + ";\n");
 						}
 						
 						output.append("\n\n");
 						
-						output.append("public static void entryMethod(");
+						output.append(ProgGenUtil.tabSpacing(numOfTabs) + "public static void entryMethod(");
 						//int i0, int i1, int i2, int i3, int i4, int i5, int i6){\n");
 						
-						output.append(formalParam + "){\n");
+						output.append(formalParam + ") {\n");
+						numOfTabs++;
 						
 						for( int k = 0; k < ProgGenUtil.maxNoOfParameters; k++){
-							output.append("f"+k+ " = " + "i"+ k+ ";\n");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "f"+k+ " = " + "i"+ k+ ";\n");
 						}
 						
-						output.append("TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n}\n\n");
+						output.append(ProgGenUtil.tabSpacing(numOfTabs) + "TStart_L"+(level-1)+"_0.entryMethod("+ argument +");\n"
+								+ ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n\n");
+						numOfTabs--;
 					}
 					
 					if ((generateAndroidServices && generateBasicAndroidApp) || generateAndroidServices) {
 						if (generateAndroidServices && generateBasicAndroidApp) {
-							output.append("@Override\n"
-									+ "protected void onCreate(Bundle savedInstanceState) {\n"
-									+ "super.onCreate(savedInstanceState);\n"
-									+ "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
-									+ "builder1.setMessage(\"Hello World!\");\n"
-									+ "builder1.setCancelable(true);\n"
-									+ "AlertDialog alert11 = builder1.create();\n"
-									+ "alert11.show();\n");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setMessage(\"Hello World!\");\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setCancelable(true);\n\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog alert11 = builder1.create();\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "alert11.show();\n\n");
 						} else {
-							output.append("@Override\n" + 
-									"protected void onCreate(Bundle savedInstanceState) {\n" +
-									"super.onCreate(savedInstanceState);\n");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n" + 
+									ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n" +
+									ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n");
 						}
+						numOfTabs++;
 						
 						int count = 0;
 						
 						for (int j = 0; j < methCallLimit && count < target; j++, count++) {
-							output.append("Intent service" + j + " = new Intent(this, "
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "Intent service" + j + " = new Intent(this, "
 									+ ConfigurationXMLParser.getProperty("classNamePrefix")
 									+ count + ".class);\n"
-									+ "startService(service" + j + ");\n");
+									+ ProgGenUtil.tabSpacing(numOfTabs) + "startService(service" + j + ");\n");
 							manifest.append("<service\n"+
 									"android:name=\"."+ ConfigurationXMLParser.getProperty("classNamePrefix") + count + "\"\n"+
 									"android:exported=\"false\"/>\n");
 						}
-						output.append("}\n");
+						
+						output.append(ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n");
+						numOfTabs--;
 					} else {
 						if (generateBasicAndroidApp) {
-							output.append("@Override\n"
-									+ "protected void onCreate(Bundle savedInstanceState) {\n"
-									+ "super.onCreate(savedInstanceState);\n"
-									+ "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
-									+ "builder1.setMessage(\"Hello World!\");\n"
-									+ "builder1.setCancelable(true);\n"
-									+ "AlertDialog alert11 = builder1.create();\n"
-									+ "alert11.show();\n"
-									+ "entryMethod(");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "@Override\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs) + "protected void onCreate(Bundle savedInstanceState) {\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "super.onCreate(savedInstanceState);\n\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog.Builder builder1 = new AlertDialog.Builder(this);\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setMessage(\"Hello World!\");\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "builder1.setCancelable(true);\n\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "AlertDialog alert11 = builder1.create();\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "alert11.show();\n\n"
+									+ ProgGenUtil.tabSpacing(numOfTabs+1) + "entryMethod(");
 						} else {
-							output.append("public static void main(String[] args){\n entryMethod(");
+							output.append(ProgGenUtil.tabSpacing(numOfTabs) + "public static void main(String[] args) {\n" + "entryMethod(");
 						}
+						numOfTabs++;
 						
 						StringBuilder str = new StringBuilder();
+						str.append(ProgGenUtil.tabSpacing(numOfTabs));
 						
 						for(int i =0; i < ProgGenUtil.maxNoOfParameters; i++){
 							str.append(generateBasicAndroidApp ? "(int)(Math.random() * 100)," : "Integer.parseInt(args["+ i+ "]),");
@@ -366,11 +376,14 @@ public class TreeOfSingleEntryGenerator {
 						
 						String s = str.toString();
 						s = s.substring(0, str.length()-1);
-						s += ");\n}";
+						s += ");\n"
+								+ ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n";
+						numOfTabs--;
 						output.append(s);
 					}
 					
-					output.append("\n}");	
+					output.append(ProgGenUtil.tabSpacing(numOfTabs-1) + "}\n");	
+					numOfTabs--;
 					manifest.append("</application>\n" + 
 							"\n" + 
 							"</manifest>");

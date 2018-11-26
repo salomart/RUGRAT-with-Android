@@ -3,6 +3,7 @@ package edu.uta.cse.proggen.statements;
 import java.util.Random;
 
 import edu.uta.cse.proggen.classLevelElements.Method;
+import edu.uta.cse.proggen.util.ProgGenUtil;
 
 /**
  * Creates a print statement to be appended to the method body.
@@ -27,7 +28,7 @@ public class PrintStatement
 
 		for (int i = 0; i <= option; i++) 
 		{
-			stmt = "System.out.println(\""+ method.getAssociatedClass().getFileName()
+			stmt = ProgGenUtil.tabSpacing(2) + "System.out.println(\""+ method.getAssociatedClass().getFileName()
 			+ " - " + method.getName() + "- LineInMethod: " + method.getLoc() + "\");" + "\n";
 		}
 
